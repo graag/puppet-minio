@@ -79,11 +79,16 @@ class minio::config (
 
   $resulting_configuration = to_sorted_json(deep_merge($default_configuration, $configuration))
 
-  file { "${configuration_directory}/config.json":
+  file { "${configuration_directory}/config.json.puppet":
     content => $resulting_configuration,
     owner   => $owner,
     group   => $group,
     mode    => '0644',
+  }
+  ~>
+  exec { 'update config file':
+    command     => "/bin/cp ${configuration_directory}/config.json.puppet ${configuration_directory}/config.json",
+    refreshonly => true,
   }
 
 }

@@ -28,7 +28,7 @@ describe 'minio::config', type: :class do
           }
         end
 
-        it { is_expected.to contain_file('/etc/minio/config.json') }
+        it { is_expected.to contain_file('/etc/minio/config.json.puppet') }
       end
     end
   end

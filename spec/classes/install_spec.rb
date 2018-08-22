@@ -30,6 +30,9 @@ describe 'minio::install', type: :class do
             service_mode: '0644',
           }
         end
+        let(:pre_condition) {
+          'service { "minio": }'
+        }
 
         it { is_expected.to contain_remote_file('minio') }
         it { is_expected.to contain_file('/etc/minio') }

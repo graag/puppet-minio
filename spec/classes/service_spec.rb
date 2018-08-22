@@ -14,6 +14,9 @@ describe 'minio::service', type: :class do
             service_provider: 'systemd',
           }
         end
+        let(:pre_condition) {
+          'remote_file { "minio": }'
+        }
 
         it { is_expected.to contain_service('minio') }
       end
