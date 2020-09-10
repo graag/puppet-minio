@@ -110,6 +110,7 @@ class minio::install (
     ensure => 'directory',
     owner  => $owner,
     group  => $group,
+    mode   =>  '0700',
     notify => Exec["permissions:${certs_directory}"],
   }
 
