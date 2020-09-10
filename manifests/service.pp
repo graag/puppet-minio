@@ -25,19 +25,9 @@
 class minio::service (
   Boolean $manage_service  = $minio::manage_service,
   String $service_provider = $minio::service_provider,
-  String $configuration_directory = $minio::configuration_directory
   ) {
 
   if ($manage_service) {
-    file { '/etc/minio/config.env':
-      ensure  => file,
-      content => template('minio/config.erb'),
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0600',
-      require => File[$configuration_directory],
-    }
-
     service { 'minio':
       ensure     => 'running',
       enable     => true,

@@ -182,6 +182,15 @@ class minio::install (
   }
 
   if ($manage_service) {
+    file { "${configuration_directory}/config.env":
+      ensure  => file,
+      content => template('minio/config.erb'),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600',
+      require => File[$configuration_directory],
+    }
+
     file { "service:${service_path}":
       path    => $service_path,
       content => template($service_template),
