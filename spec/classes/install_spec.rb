@@ -22,6 +22,10 @@ describe 'minio::install', type: :class do
             storage_root: '/var/minio',
             listen_ip: '127.0.0.1',
             listen_port: 9000,
+            access_key: 'ADMIN',
+            secret_key: 'PASSWORD',
+            region: 'us-east-1',
+            browser: 'on',
             manage_service: true,
             service_template: 'minio/systemd.erb',
             service_path: '/lib/systemd/system/minio.service',
@@ -29,9 +33,9 @@ describe 'minio::install', type: :class do
             service_mode: '0644',
           }
         end
-        let(:pre_condition) {
+        let(:pre_condition) do
           'service { "minio": }'
-        }
+        end
 
         it { is_expected.to contain_remote_file('minio') }
         it { is_expected.to contain_file('/etc/minio') }

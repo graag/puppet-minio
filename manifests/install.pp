@@ -43,6 +43,18 @@
 # * `listen_port`
 # Port on which Minio should listen to requests.
 #
+# * `access_key`
+# Admin user
+#
+# * `secret_key`
+# Admin user password
+#
+# * `region`
+# S3 Region
+#
+# * `browser`
+# Enable browser GUI: on/off
+#
 # * `manage_service`
 # Should we manage a service definition for Minio?
 #
@@ -82,6 +94,11 @@ class minio::install (
   String $storage_root            = $minio::storage_root,
   String $listen_ip               = $minio::listen_ip,
   Integer $listen_port            = $minio::listen_port,
+
+  String $access_key              = $minio::access_key,
+  String $secret_key              = $minio::secret_key,
+  String $region                  = $minio::region,
+  String $browser                 = $minio::browser,
 
   Boolean $manage_service         = $minio::manage_service,
   String $service_template        = $minio::service_template,
