@@ -40,7 +40,7 @@
 # Type of checksum used to verify the binary being installed. Default: 'sha256'
 #
 # * `configuration_directory`
-# Directory holding Minio configuration file. Default: '/etc/minio'
+# Directory holding legacy minio configurationa and certs subdirectory for TLS certificates. Default: '/etc/minio'
 #
 # * `installation_directory`
 # Target directory to hold the minio installation. Default: '/opt/minio'
@@ -48,17 +48,23 @@
 # * `storage_root`
 # Directory where minio will keep all data. Default: '/var/minio'
 #
-# * `log_directory`
-# Log directory for minio. Default: '/var/log/minio'
-#
 # * `listen_ip`
 # IP address on which Minio should listen to requests.
 #
 # * `listen_port`
 # Port on which Minio should listen to requests.
 #
-# * `configuration`
-# Hash style settings for configuring Minio.
+# * `access_key`
+# Admin user
+#
+# * `secret_key`
+# Admin user password
+#
+# * `region`
+# S3 Region
+#
+# * `browser`
+# Enable browser GUI: on/off
 #
 # * `manage_service`
 # Should we manage a service definition for Minio?
@@ -109,11 +115,13 @@ class minio (
   String $configuration_directory,
   String $installation_directory,
   String $storage_root,
-  String $log_directory,
   String $listen_ip,
   Integer $listen_port,
 
-  Hash $configuration,
+  String $access_key,
+  String $secret_key,
+  String $region,
+  String $browser,
 
   Boolean $manage_service,
   String $service_template,
@@ -124,8 +132,6 @@ class minio (
 
   class { '::minio::user': }
   class { '::minio::install': }
-
-  class { '::minio::config': }
   class { '::minio::service': }
 
   anchor { 'minio::begin': }
@@ -134,6 +140,5 @@ class minio (
   Anchor['minio::begin']
   -> Class['minio::user']
   -> Class['minio::install']
-  -> Class['minio::config']
   ~> Class['minio::service']
 }

@@ -14,7 +14,12 @@ Group=<%= @group %>
 
 PermissionsStartOnly=true
 
-ExecStart=<%= @installation_directory %>/minio server --address <%= @listen_ip %>:<%= @listen_port %> --config-dir <%= @configuration_directory %> <%= @storage_root %>
+Environment=MINIO_ACCESS_KEY=<%= @access_key %>
+Environment=MINIO_SECRET_KEY=<%= @secret_key %>
+Environment=MINIO_REGION_NAME=<%= @region %>
+Environment=MINIO_BROWSER=<%= @browser %>
+
+ExecStart=<%= @installation_directory %>/minio server --address <%= @listen_ip %>:<%= @listen_port %> --certs-dir <%= @configuration_directory %>/certs <%= @storage_root %>
 
 StandardOutput=journal
 StandardError=inherit

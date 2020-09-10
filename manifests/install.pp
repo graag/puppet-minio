@@ -29,16 +29,13 @@
 # Type of checksum used to verify the binary being installed. Default: 'sha256'
 #
 # * `configuration_directory`
-# Directory holding Minio configuration file. Default: '/etc/minio'
+# Directory holding legacy Minio configuration and certs subdirectory for TLS certificates. Default: '/etc/minio'
 #
 # * `installation_directory`
 # Target directory to hold the minio installation. Default: '/opt/minio'
 #
 # * `storage_root`
 # Directory where minio will keep all files. Default: '/var/minio'
-#
-# * `log_directory`
-# Log directory for minio. Default: '/var/log/minio'
 #
 # * `listen_ip`
 # IP address on which Minio should listen to requests.
@@ -83,7 +80,6 @@ class minio::install (
   String $configuration_directory = $minio::configuration_directory,
   String $installation_directory  = $minio::installation_directory,
   String $storage_root            = $minio::storage_root,
-  String $log_directory           = $minio::log_directory,
   String $listen_ip               = $minio::listen_ip,
   Integer $listen_port            = $minio::listen_port,
 
@@ -93,6 +89,8 @@ class minio::install (
   String $service_provider        = $minio::service_provider,
   String $service_mode            = $minio::service_mode,
   ) {
+
+  $certs_directory = "${configuration_directory}/certs"
 
   file { $storage_root:
     ensure => 'directory',
@@ -108,18 +106,18 @@ class minio::install (
     notify => Exec["permissions:${configuration_directory}"],
   }
 
+  -> file { $certs_directory:
+    ensure => 'directory',
+    owner  => $owner,
+    group  => $group,
+    notify => Exec["permissions:${certs_directory}"],
+  }
+
   -> file { $installation_directory:
     ensure => 'directory',
     owner  => $owner,
     group  => $group,
     notify => Exec["permissions:${installation_directory}"],
-  }
-
-  -> file { $log_directory:
-    ensure => 'directory',
-    owner  => $owner,
-    group  => $group,
-    notify => Exec["permissions:${log_directory}"],
   }
 
   if ($package_ensure) {
@@ -153,7 +151,13 @@ class minio::install (
   }
 
   exec { "permissions:${configuration_directory}":
-    command     => "chown -Rf ${owner}:${group} ${installation_directory}",
+    command     => "chown -Rf ${owner}:${group} ${configuration_directory}",
+    path        => '/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin',
+    refreshonly => true,
+  }
+
+  exec { "permissions:${certs_directory}":
+    command     => "chown -Rf ${owner}:${group} ${certs_directory}",
     path        => '/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin',
     refreshonly => true,
   }
@@ -172,12 +176,6 @@ class minio::install (
 
   exec { "permissions:${storage_root}":
     command     => "chown -Rf ${owner}:${group} ${storage_root}",
-    path        => '/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin',
-    refreshonly => true,
-  }
-
-  exec { "permissions:${log_directory}":
-    command     => "chown -Rf ${owner}:${group} ${log_directory}",
     path        => '/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin',
     refreshonly => true,
   }

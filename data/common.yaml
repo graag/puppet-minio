@@ -13,14 +13,10 @@ minio::checksum_type: 'sha256'
 minio::configuration_directory: '/etc/minio'
 minio::installation_directory: '/opt/minio'
 minio::storage_root: '/var/minio'
-minio::log_directory: '/var/log/minio'
-minio::configuration:
-  'version': '19'           # Depends on used Minio release
-  'credential':
-    'accessKey': 'ADMIN'
-    'secretKey': 'PASSWORD'
-  'region': 'us-east-1'
-  'browser': 'on'
+minio::access_key: 'ADMIN'
+minio::secret_key: 'PASSWORD'
+minio::region: 'us-east-1'
+minio::browser: 'on'
 minio::listen_ip: 127.0.0.1
 minio::listen_port: 9000
 minio::manage_service: true

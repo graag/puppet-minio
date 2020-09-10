@@ -13,8 +13,7 @@ describe 'minio', type: :class do
         it { is_expected.to contain_anchor('minio::begin') }
         it { is_expected.to contain_anchor('minio::end') }
         it { is_expected.to contain_class('minio::user') }
-        it { is_expected.to contain_class('minio::install').that_comes_before('Class[minio::config]') }
-        it { is_expected.to contain_class('minio::config').that_notifies('Class[minio::service]') }
+        it { is_expected.to contain_class('minio::install').that_comes_before('Class[minio::service]') }
         it { is_expected.to contain_class('minio::service') }
       end
     end

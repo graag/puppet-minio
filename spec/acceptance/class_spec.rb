@@ -29,14 +29,6 @@ describe 'minio class' do
       it { is_expected.to be_directory }
     end
 
-    describe file('/etc/minio/config.json') do
-      it { is_expected.to be_file }
-    end
-
-    describe file('/var/log/minio') do
-      it { is_expected.to be_directory }
-    end
-
     describe file('/opt/minio/minio') do
       it { is_expected.to be_file }
     end
