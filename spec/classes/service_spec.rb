@@ -12,10 +12,14 @@ describe 'minio::service', type: :class do
           {
             manage_service: true,
             service_provider: 'systemd',
+            configuration_directory: '/etc/minio',
           }
         end
         let(:pre_condition) {
-          'remote_file { "minio": }'
+          [
+            'file { "/etc/minio": ensure => "directory"}',
+            'remote_file { "minio": }'
+          ]
         }
 
         it { is_expected.to contain_service('minio') }
